@@ -52,7 +52,7 @@
                     }
                 })(marker, i));
 
-                
+
                 map.fitBounds(bounds);
             }
 
@@ -78,13 +78,13 @@
                     {
                         var lat =results[0].geometry.location.lat();
                          var lng = results[0].geometry.location.lng();
-                            getTweetsByLatLng(lat,lng);
+                            getTweetsByLatLng(location,lat,lng);
                     }
                 }
             )
         });
 
-        function getTweetsByLatLng(lat,lng) {
+        function getTweetsByLatLng(location,lat,lng) {
             $.ajax({
                url:"{{route('ajax.tweets')}}",
                 type:"get",
@@ -94,7 +94,6 @@
                    console.log(response);
                     markers = [];
                     infoWindowContent = [];
-                    console.log("url:" + response.url);
                     if (response.length) {
                         for (var i = 0; i < response.length; i++) {
                             var markerTweet = [response[i].screen_name, response[i].lat, response[i].lng, response[i].profile_img];
@@ -102,14 +101,15 @@
 
                             var infoTweet = ['<div class="info_content"><p>' + response[i].text + ' <a href="' + response[i].url + '" target="_blank">more..</a></p></div>'];
                             infoWindowContent.push(infoTweet);
+                            $('#location').val(location);
                         }
                     } else {
-                        var markerTweet = ['Tweets in your city', 13.75, 100.50];
+                        var markerTweet = ['Tweets in your city', lat,lng];
                         markers.push(markerTweet);
 
                         var infoTweet = ['<div class="info_content"><p>No tweets found, try again</p></div>'];
                         infoWindowContent.push(infoTweet);
-                        $('#location').val('Bangkok');
+                        $('#location').val(location);
                     }
 
                     initMap();

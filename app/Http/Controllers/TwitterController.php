@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Thujohn\Twitter\Twitter;
+use Illuminate\Support\Facades\Cache;
 
 class TwitterController extends Controller
 {
@@ -19,24 +20,35 @@ class TwitterController extends Controller
     {
         $lat = $request->get('lat');
         $long = $request->get('lng');
-        $params = [
+
+//       $requestParams =  $this->prepareRequestParams($lat,$long);
+
+        $cacheKey = $lat.$long;
+        Cache::remember($cacheKey, env('TWITTER_TTL'), function () use ($lat, $long) {
+            $params= $this->prepareRequestParams($lat,$long);
+            return $this->getSearchTweets($params);
+        });
+
+
+
+
+    }
+
+    public function prepareRequestParams($lat,$long)
+    {
+       return  $params = [
             'q' => '',
             'geocode' => $lat . ',' . $long . ',' . env('TWITTER_RADIUS'),
             'until' => '2017-11-19',
             'count' => 100
         ];
 
-        $tweets = $this->twitter->getSearch($params);
-
-
-        $parsedTweets =  $this->parseTweets($tweets);
-
-        return response()->json($parsedTweets);
     }
 
 
-    public function parseTweets($tweets)
+    public function getSearchTweets($params)
     {
+        $tweets = $this->twitter->getSearch($params);
         $data = [];
         foreach ($tweets->statuses as $key => $tweet) {
             if ($tweet->geo) {
@@ -51,7 +63,6 @@ class TwitterController extends Controller
                 ];
             }
         }
-//        dd($data);
         return $data;
     }
 }
