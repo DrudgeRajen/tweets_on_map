@@ -13,4 +13,4 @@
 
 Route::get('/','HomeController@index');
 
-Route::get('ajaxGetTweetsBylatlng','TwitterController@getTweetByLatLng')->name('ajax.tweets');
+Route::get('ajaxGetTweetsByLatLng','TweetController@getTweetByLatLng')->name('ajax.tweets');

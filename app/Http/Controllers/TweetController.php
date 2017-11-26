@@ -6,46 +6,68 @@ use Illuminate\Http\Request;
 use Thujohn\Twitter\Twitter;
 use Illuminate\Support\Facades\Cache;
 
-class TwitterController extends Controller
+/**
+ * Class TweetController
+ * @package App\Http\Controllers
+ * @author Rajendra Sharma <drudge.rajan@gmail.com>
+ */
+class TweetController extends Controller
 {
 
+    /**
+     * @var Twitter
+     */
     private $twitter;
 
+    /**
+     * TweetController constructor.
+     * @param Twitter $twitter
+     */
     public function __construct(Twitter $twitter)
     {
         $this->twitter = $twitter;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getTweetByLatLng(Request $request)
     {
         $lat = $request->get('lat');
         $long = $request->get('lng');
 
-//       $requestParams =  $this->prepareRequestParams($lat,$long);
 
-        $cacheKey = $lat.$long;
-        Cache::remember($cacheKey, env('TWITTER_TTL'), function () use ($lat, $long) {
-            $params= $this->prepareRequestParams($lat,$long);
+        $cacheKey = $lat . $long;
+        $tweets = Cache::remember($cacheKey, env('TWITTER_TTL'), function () use ($lat, $long) {
+            $params = $this->prepareRequestParams($lat, $long);
             return $this->getSearchTweets($params);
         });
 
-
-
+        return response()->json($tweets);
 
     }
 
-    public function prepareRequestParams($lat,$long)
+    /**
+     * @param $lat
+     * @param $long
+     * @return array
+     */
+    public function prepareRequestParams($lat, $long)
     {
-       return  $params = [
+        return $params = [
             'q' => '',
             'geocode' => $lat . ',' . $long . ',' . env('TWITTER_RADIUS'),
-            'until' => '2017-11-19',
             'count' => 100
         ];
 
     }
 
 
+    /**
+     * @param $params
+     * @return array
+     */
     public function getSearchTweets($params)
     {
         $tweets = $this->twitter->getSearch($params);
