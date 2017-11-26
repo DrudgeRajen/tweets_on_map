@@ -11,26 +11,60 @@
     </form>
 
     <script>
+
+        var markers = [],
+            infoWindowContent = []
         function initMap(){
             var BangkokLatLng = {
                 lat: 13.7563309,
                 lng: 100.50176510000006
             };
 
-            var markers = [],
-                infoWindowContent = []
+
+
+            var bounds = new google.maps.LatLngBounds();
 
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 15,
                 center: BangkokLatLng
             });
 
-            var marker = new google.maps.Marker({
-                position: BangkokLatLng,
-                map: map,
+
+            var infoWindow = new google.maps.InfoWindow(),
+                marker, i;
+                console.log(markers);
+
+            for (i = 0; i < markers.length; i++) {
+                var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+                bounds.extend(position);
+                marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    icon: markers[i][3],
+                    title: markers[i][0]
+                });
+
+
+                google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                    return function() {
+                        infoWindow.setContent(infoWindowContent[i][0]);
+                        infoWindow.open(map, marker);
+                    }
+                })(marker, i));
+
+                
+                map.fitBounds(bounds);
+            }
+
+
+            var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+                this.setZoom(10);
+                google.maps.event.removeListener(boundsListener);
             });
         }
         google.maps.event.addDomListener(window, 'load', initMap);
+
+
 
         $('#search').on('click',function () {
             var location = $("#location").val();
@@ -56,9 +90,30 @@
                 type:"get",
                 dataType:"json",
                 data:"lat="+lat + "&lng=" + lng,
-               success:function (response) {
+                success: function(response) {
                    console.log(response);
-               }
+                    markers = [];
+                    infoWindowContent = [];
+                    console.log("url:" + response.url);
+                    if (response.length) {
+                        for (var i = 0; i < response.length; i++) {
+                            var markerTweet = [response[i].screen_name, response[i].lat, response[i].lng, response[i].profile_img];
+                            markers.push(markerTweet);
+
+                            var infoTweet = ['<div class="info_content"><p>' + response[i].text + ' <a href="' + response[i].url + '" target="_blank">more..</a></p></div>'];
+                            infoWindowContent.push(infoTweet);
+                        }
+                    } else {
+                        var markerTweet = ['Tweets in your city', 13.75, 100.50];
+                        markers.push(markerTweet);
+
+                        var infoTweet = ['<div class="info_content"><p>No tweets found, try again</p></div>'];
+                        infoWindowContent.push(infoTweet);
+                        $('#location').val('Bangkok');
+                    }
+
+                    initMap();
+                }
             });
         }
 
