@@ -4,11 +4,11 @@
     <div class="ajax-loader" style="display: none;">
         <img src="{{asset('image/loader.gif')}}">
     </div>
-    <form class="form-inline ">
+    <form class="form-inline" id="searchTweets">
         <div class="form-group tweets_on_maps clearfix">
-        <input type="text" class="form-control" id="location">
-            <button type="button" id="search" class="btn btn-primary">Search</button>
-            <button type="button" id="history" class="btn btn-primary">History</button>
+        <input type="text" class="form-control" id="autocomplete" name="location">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="button" class="btn btn-primary">History</button>
         </div>
     </form>
 
@@ -16,7 +16,12 @@
 
         var markers = [],
             infoWindowContent = []
+        var autocomplete;
         function initMap(){
+            autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById('autocomplete'),
+                { types: ['geocode'] }
+            );
             var BangkokLatLng = {
                 lat: 13.7563309,
                 lng: 100.50176510000006
@@ -68,9 +73,10 @@
 
 
 
-        $('#search').on('click',function () {
+        $('#searchTweets').submit(function (e) {
+            e.preventDefault();
             $('.ajax-loader').show();
-            var location = $("#location").val();
+            var location = $("#searchTweets").serialize();
                 console.log(location);
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({
@@ -88,6 +94,8 @@
         });
 
         function getTweetsByLatLng(location,lat,lng) {
+            console.log(lat);
+            console.log(lng);
             $.ajax({
                url:"{{route('ajax.tweets')}}",
                 type:"get",
@@ -111,8 +119,9 @@
                         var markerTweet = ['Tweets in your city', lat,lng];
                         markers.push(markerTweet);
 
-                        var infoTweet = ['<div class="info_content"><p>No tweets found, try again</p></div>'];
+                        var infoTweet = ['<div class="info_content"><p>No tweets found, Please try again !!</p></div>'];
                         infoWindowContent.push(infoTweet);
+                        console.log('here');
                         $('#location').val(location);
                         $('.ajax-loader').hide();
                     }
