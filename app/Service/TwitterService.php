@@ -1,17 +1,22 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: drudge
+ * Date: 11/27/17
+ * Time: 10:32 PM
+ */
 
-namespace App\Http\Controllers;
+namespace App\Service;
 
-use Illuminate\Http\Request;
+
 use Thujohn\Twitter\Twitter;
-use Illuminate\Support\Facades\Cache;
 
 /**
- * Class TweetController
- * @package App\Http\Controllers
+ * Class TwitterService
+ * @package App\Service
  * @author Rajendra Sharma <drudge.rajan@gmail.com>
  */
-class TweetController extends Controller
+class TwitterService
 {
 
     /**
@@ -26,28 +31,6 @@ class TweetController extends Controller
     public function __construct(Twitter $twitter)
     {
         $this->twitter = $twitter;
-    }
-
-    /**
-     * Get Tweets by Latitude and Longitude
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getTweetByLatLng(Request $request)
-    {
-        $lat = $request->get('lat');
-        $long = $request->get('lng');
-
-
-        $cacheKey = $lat . $long;
-        $tweets = Cache::remember($cacheKey, env('TWITTER_TTL'), function () use ($lat, $long) {
-            $params = $this->prepareRequestParams($lat, $long);
-            return $this->getSearchTweets($params);
-        });
-
-        return response()->json($tweets);
-
     }
 
     /**
@@ -93,4 +76,5 @@ class TweetController extends Controller
         }
         return $data;
     }
+
 }
