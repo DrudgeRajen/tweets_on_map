@@ -29,6 +29,8 @@ class TweetController extends Controller
     }
 
     /**
+     * Get Tweets by Latitude and Longitude
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -49,6 +51,8 @@ class TweetController extends Controller
     }
 
     /**
+     * Prepare Parameters for API Request
+     *
      * @param $lat
      * @param $long
      * @return array
@@ -65,6 +69,8 @@ class TweetController extends Controller
 
 
     /**
+     * Get Search Tweets by parameters
+     *
      * @param $params
      * @return array
      */

@@ -24,3 +24,10 @@ html, body {
     border-radius: 0;
     /*float: left;*/
 }
+
+.ajax-loader {
+    position: absolute;
+    top: 244px;
+    z-index: 99;
+    margin-left: 600px;
+}

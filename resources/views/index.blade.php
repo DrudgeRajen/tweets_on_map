@@ -1,7 +1,9 @@
 @extends('layouts.master')
 @section('content')
     <div id="map"></div>
-
+    <div class="ajax-loader" style="display: none;">
+        <img src="{{asset('image/loader.gif')}}">
+    </div>
     <form class="form-inline ">
         <div class="form-group tweets_on_maps clearfix">
         <input type="text" class="form-control" id="location">
@@ -67,6 +69,7 @@
 
 
         $('#search').on('click',function () {
+            $('.ajax-loader').show();
             var location = $("#location").val();
                 console.log(location);
             var geocoder = new google.maps.Geocoder();
@@ -103,6 +106,7 @@
                             infoWindowContent.push(infoTweet);
                             $('#location').val(location);
                         }
+                        $('.ajax-loader').hide();
                     } else {
                         var markerTweet = ['Tweets in your city', lat,lng];
                         markers.push(markerTweet);
@@ -110,6 +114,7 @@
                         var infoTweet = ['<div class="info_content"><p>No tweets found, try again</p></div>'];
                         infoWindowContent.push(infoTweet);
                         $('#location').val(location);
+                        $('.ajax-loader').hide();
                     }
 
                     initMap();
