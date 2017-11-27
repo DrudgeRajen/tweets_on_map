@@ -102,7 +102,6 @@ function getTweetsByLatLng(location, lat, lng) {
         dataType: "json",
         data: "lat=" + lat + "&lng=" + lng,
         success: function (response) {
-            console.log(response);
             markers = [];
             infoWindowContent = [];
             if (response.length) {
