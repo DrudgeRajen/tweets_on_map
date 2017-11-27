@@ -1,10 +1,14 @@
-
 var markers = [],
     infoWindowContent = []
 var autocomplete;
 
-
+/**
+ * Initialize Map
+ *
+ */
 function initMap(){
+
+    // Initalize Autocomplete Places
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete'),
         { types: ['geocode'] }
@@ -18,6 +22,7 @@ function initMap(){
 
     var bounds = new google.maps.LatLngBounds();
 
+    //Initialize and display map with lat and lng of bangkok as default
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 15,
         center: BangkokLatLng
@@ -26,8 +31,8 @@ function initMap(){
 
     var infoWindow = new google.maps.InfoWindow(),
         marker, i;
-    console.log(markers);
 
+    // Loop the markers(as they are multiple profile image of tweets in different location)
     for (i = 0; i < markers.length; i++) {
         var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
         bounds.extend(position);
@@ -39,6 +44,7 @@ function initMap(){
         });
 
 
+        //show the content in the info window on click of marker
         google.maps.event.addListener(marker, 'click', (function(marker, i) {
             return function() {
                 infoWindow.setContent(infoWindowContent[i][0]);
@@ -58,8 +64,12 @@ function initMap(){
 }
 google.maps.event.addDomListener(window, 'load', initMap);
 
+getTweetsByLatLng('Bangkok',13.7563309,100.50176510000006);
 
-
+/**
+ *  Submit a from
+ *
+ */
 $('#searchTweets').submit(function (e) {
     e.preventDefault();
     $('.ajax-loader').show();
@@ -80,6 +90,13 @@ $('#searchTweets').submit(function (e) {
     )
 });
 
+/**
+ * Get Tweets by latitude and longitude
+ *
+ * @param location
+ * @param lat
+ * @param lng
+ */
 function getTweetsByLatLng(location,lat,lng) {
     console.log(lat);
     console.log(lng);
