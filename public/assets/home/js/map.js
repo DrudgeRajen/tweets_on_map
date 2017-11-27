@@ -72,7 +72,6 @@ getTweetsByLatLng('Bangkok', 13.7563309, 100.50176510000006);
  */
 $('#searchTweets').submit(function (e) {
     e.preventDefault();
-    $('.ajax-loader').show();
     var location = $("#autocomplete").val();
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({
@@ -82,7 +81,13 @@ $('#searchTweets').submit(function (e) {
             if (status == 'OK') {
                 var lat = results[0].geometry.location.lat();
                 var lng = results[0].geometry.location.lng();
+                $('.ajax-loader').show();
                 getTweetsByLatLng(location, lat, lng);
+
+            }
+            else{
+                alert('Error : ' + status)
+                return false;
             }
         }
     )
@@ -111,7 +116,7 @@ function getTweetsByLatLng(location, lat, lng) {
 
                     var infoTweet = ['<div class="info_content"><p>' + response[i].text + ' <a href="' + response[i].url + '" target="_blank">more..</a></p></div>'];
                     infoWindowContent.push(infoTweet);
-                    $('#location').val(location);
+                    $('#autocomplete').val(location);
                 }
                 $('.ajax-loader').hide();
             } else {
@@ -120,11 +125,14 @@ function getTweetsByLatLng(location, lat, lng) {
 
                 var infoTweet = ['<div class="info_content"><p>No tweets found, Please try again !!</p></div>'];
                 infoWindowContent.push(infoTweet);
-                $('#location').val(location);
+                $('#autocomplete').val(location);
                 $('.ajax-loader').hide();
             }
 
             initMap();
+        },
+        error:function (response) {
+            alert('OOPS !! Something went wrong' + response);
         }
     });
 }
