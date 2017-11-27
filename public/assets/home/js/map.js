@@ -73,7 +73,7 @@ getTweetsByLatLng('Bangkok',13.7563309,100.50176510000006);
 $('#searchTweets').submit(function (e) {
     e.preventDefault();
     $('.ajax-loader').show();
-    var location = $("#searchTweets").serialize();
+    var location = $("#autocomplete").val();
     console.log(location);
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({
@@ -98,8 +98,6 @@ $('#searchTweets').submit(function (e) {
  * @param lng
  */
 function getTweetsByLatLng(location,lat,lng) {
-    console.log(lat);
-    console.log(lng);
     $.ajax({
         url: APP_URL + "/ajaxGetTweetsByLatLng",
         type:"get",
@@ -120,7 +118,7 @@ function getTweetsByLatLng(location,lat,lng) {
                 }
                 $('.ajax-loader').hide();
             } else {
-                var markerTweet = ['Tweets in your city', lat,lng];
+                var markerTweet = ['Tweets in ' + location, lat,lng];
                 markers.push(markerTweet);
 
                 var infoTweet = ['<div class="info_content"><p>No tweets found, Please try again !!</p></div>'];
