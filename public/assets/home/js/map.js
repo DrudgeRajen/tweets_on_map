@@ -55,7 +55,7 @@ function initMap() {
         map.fitBounds(bounds);
     }
 
-
+    //Fixed Map bounds
     var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
         this.setZoom(10);
         google.maps.event.removeListener(boundsListener);
