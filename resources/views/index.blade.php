@@ -2,7 +2,6 @@
 @section('content')
     <div id="map"></div>
     <div class="ajax-loader" style="display: none;">
-        <img src="{{asset('assets/home/image/loader.gif')}}">
     </div>
     <form class="form-inline" id="searchTweets">
         <div class="form-group tweets_on_maps clearfix">
