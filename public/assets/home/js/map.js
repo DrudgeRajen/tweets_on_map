@@ -6,18 +6,17 @@ var autocomplete;
  * Initialize Map
  *
  */
-function initMap(){
+function initMap() {
 
     // Initalize Autocomplete Places
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('autocomplete'),
-        { types: ['geocode'] }
+        {types: ['geocode']}
     );
     var BangkokLatLng = {
         lat: 13.7563309,
         lng: 100.50176510000006
     };
-
 
 
     var bounds = new google.maps.LatLngBounds();
@@ -45,8 +44,8 @@ function initMap(){
 
 
         //show the content in the info window on click of marker
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
+        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            return function () {
                 infoWindow.setContent(infoWindowContent[i][0]);
                 infoWindow.open(map, marker);
             }
@@ -57,14 +56,15 @@ function initMap(){
     }
 
 
-    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function (event) {
         this.setZoom(10);
         google.maps.event.removeListener(boundsListener);
     });
 }
+
 google.maps.event.addDomListener(window, 'load', initMap);
 
-getTweetsByLatLng('Bangkok',13.7563309,100.50176510000006);
+getTweetsByLatLng('Bangkok', 13.7563309, 100.50176510000006);
 
 /**
  *  Submit a from
@@ -74,17 +74,15 @@ $('#searchTweets').submit(function (e) {
     e.preventDefault();
     $('.ajax-loader').show();
     var location = $("#autocomplete").val();
-    console.log(location);
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({
-            'address':location,
+            'address': location,
         },
-        function (results,status) {
-            if (status == 'OK')
-            {
-                var lat =results[0].geometry.location.lat();
+        function (results, status) {
+            if (status == 'OK') {
+                var lat = results[0].geometry.location.lat();
                 var lng = results[0].geometry.location.lng();
-                getTweetsByLatLng(location,lat,lng);
+                getTweetsByLatLng(location, lat, lng);
             }
         }
     )
@@ -97,13 +95,13 @@ $('#searchTweets').submit(function (e) {
  * @param lat
  * @param lng
  */
-function getTweetsByLatLng(location,lat,lng) {
+function getTweetsByLatLng(location, lat, lng) {
     $.ajax({
         url: APP_URL + "/ajaxGetTweetsByLatLng",
-        type:"get",
-        dataType:"json",
-        data:"lat="+lat + "&lng=" + lng,
-        success: function(response) {
+        type: "get",
+        dataType: "json",
+        data: "lat=" + lat + "&lng=" + lng,
+        success: function (response) {
             console.log(response);
             markers = [];
             infoWindowContent = [];
@@ -118,12 +116,11 @@ function getTweetsByLatLng(location,lat,lng) {
                 }
                 $('.ajax-loader').hide();
             } else {
-                var markerTweet = ['Tweets in ' + location, lat,lng];
+                var markerTweet = ['Tweets in ' + location, lat, lng];
                 markers.push(markerTweet);
 
                 var infoTweet = ['<div class="info_content"><p>No tweets found, Please try again !!</p></div>'];
                 infoWindowContent.push(infoTweet);
-                console.log('here');
                 $('#location').val(location);
                 $('.ajax-loader').hide();
             }
