@@ -66,6 +66,11 @@ google.maps.event.addDomListener(window, 'load', initMap);
 
 getTweetsByLatLng('Bangkok', 13.7563309, 100.50176510000006);
 
+$('#history').on('click',function(){
+    console.log('test');
+   alert('Interesting feature isn\'t it ? Sorry, not implemented yet :( .');
+});
+
 /**
  *  Submit a from
  *

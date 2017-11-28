@@ -20,10 +20,11 @@ html, body {
 }
 
 .tweets_on_maps .btn {
-    width:24%;
+    width:24.7%;
     border-radius: 0;
     /*float: left;*/
 }
+
 
 .ajax-loader {
     position:fixed;
