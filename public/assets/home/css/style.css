@@ -43,3 +43,70 @@ html, body {
 .pac-container{
     margin-top: -200px;
 }
+
+
+
+/******************************************************************media-query********************************************************************/
+@media (min-width:320px) and (max-width:479px) {
+    .tweets_on_maps .form-control {
+        width:100% !important;
+
+    }
+
+    .tweets_on_maps .btn {
+        width:100% !important;
+
+    }
+}
+
+@media (min-width:480px) and (max-width:599px){
+    .tweets_on_maps .form-control {
+        width:100% !important;
+
+    }
+
+    .tweets_on_maps .btn {
+        width:100% !important;
+
+    }
+
+}
+
+@media (min-width:600px) and (max-width:767px){
+    .tweets_on_maps .form-control {
+        width:100% !important;
+
+    }
+
+    .tweets_on_maps .btn {
+        width:100% !important;
+
+    }
+
+}
+
+@media (min-width:768px) and (max-width:991px){
+    .tweets_on_maps .form-control {
+        width:100% !important;
+
+    }
+
+    .tweets_on_maps .btn {
+        width:100% !important;
+
+    }
+
+}
+
+@media (min-width:992px) and (max-width:1199px){
+    .tweets_on_maps .form-control {
+        width:100% !important;
+
+    }
+
+    .tweets_on_maps .btn {
+        width:100% !important;
+
+    }
+
+}
